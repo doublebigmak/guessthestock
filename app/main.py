@@ -1,8 +1,15 @@
 from fastapi import FastAPI
 from app.routers import game, user
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="frontend/build/static"), name="static")
+@app.get("/")
+async def root():
+    return FileResponse("frontend/build/index.html")
 
 
 app.add_middleware(
