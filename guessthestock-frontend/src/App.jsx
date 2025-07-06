@@ -13,10 +13,12 @@ function App() {
 
   // If same day, use stored; else reset to default
 
+  const [currentIndex, setCurrentIndex] = useState(()=> isSameDay ? getStored('currentIndex', 0): 0);
   const [score, setScore] = useState(() => getStored('score', 0));
   const [streak, setStreak] = useState(() => getStored('streak', 0));
   const [lives, setLives] = useState(() => isSameDay ? getStored('lives', 3) : 3);
   const [hintUsed, setHintUsed] = useState(() => isSameDay ? getStored('hintUsed', false) : false);
+  const [solvedGames, setSolvedGames] = useState(()=> isSameDay ? getStored('solvedGames',{}):{});
 
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,8 +40,10 @@ function App() {
     setStored('lives', lives);
     setStored('hintUsed', hintUsed);
     setStored('lastPlayedDate', todayDateString);
+    setStored('currentIndex', currentIndex);
+    setStored('solvedGames',solvedGames)
 
-  }, [score, streak, lives, hintUsed,todayDateString]);
+  }, [score, streak, lives, hintUsed,todayDateString,currentIndex,solvedGames]);
 
 
   const handleGuess = (game, tickerGuess, yearGuess) => {
@@ -58,6 +62,13 @@ function App() {
 
       setScore(score + pointsEarned);
       setStreak(streak + 1);
+
+      // mark game as solved
+      setSolvedGames(prev=> ({
+        ...prev,
+        [game.id]: true
+      }))
+
     } else {
       setLives(lives - 1);
       setStreak(0);
@@ -73,21 +84,39 @@ function App() {
 
 
   return (
-    <div>
-      <h1>Guess The Stock 📈</h1>
-      <p>🏆 Score: {score} | 🔥 Streak: {streak} | ❤️ Lives: {lives}</p>
+    <div className ="max-w-5xl mx-auto px-6 py-8">
+      <h1 className="text-3xl font-bold mb-2">Guess The Stock 📈</h1>
+      <p className="text-lg mb-6">🏆 Score: {score} | 🔥 Streak: {streak} | ❤️ Lives: {lives}</p>
 
       {loading && <p>Loading games...</p>}
+
       {!loading && games.length === 0 && <p>No games found.</p>}
-      {!loading && games.map(game => (
+
+      {!loading && games.length > 0 && (
+        <>
         <GameCard
-          key={game.id}
-          game={game}
+          key={games[currentIndex].id}
+          game={games[currentIndex]}
           onGuess={handleGuess}
           hintUsed={hintUsed}
           setHintUsed={setHintUsed}
+          isSolved={solvedGames[games[currentIndex].id] || false}
+          date={todayDateString}
         />
-      ))}
+
+        <button
+          className="mt-4 bg-orange-400 hover:bg-orange-500 text-white py-2 px-4 rounded"
+          onClick={() =>
+            setCurrentIndex((currentIndex + 1) % games.length)
+          }
+          disabled={lives <= 0}
+        >
+          Next Game ➡️
+        </button>
+        </>
+        
+        
+      )}
     </div>
   );
 }
