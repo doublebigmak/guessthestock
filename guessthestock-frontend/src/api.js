@@ -1,7 +1,8 @@
 
+const API_URL = process.env.REACT_APP_API_URL || '';
 
 export async function fetchTodayGames() {
-  const response = await fetch('http://localhost:8000/game/today');
+  const response = await fetch(`${API_URL}/game/today`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch games');
