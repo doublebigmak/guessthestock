@@ -75,7 +75,7 @@ export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved
             <>
                 <p>✅ Correct! You earned {result.points} point(s).</p>
                 <div className="mt-1 bg-green-900 text-green-200 p-2 rounded">
-                    Solution: {game.ticker}, ({game.end_year.slice(1,-1)})
+                    Solution: {game.ticker}, {game.end_year}
                 </div>
             </>
             
