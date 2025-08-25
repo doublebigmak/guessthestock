@@ -1,17 +1,21 @@
 
 import React, { useState } from 'react';
 import Chart from './Chart';
+import { celebrate } from '../confetti';
 
 
-export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved,date }) {
+export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved,date, pointsPerCorrect, showDates }) {
     //game object, Guess action, 
   const [tickerGuess, setTickerGuess] = useState('');
   const [yearGuess, setYearGuess] = useState('');
   const [result, setResult] = useState(null);
+  const [showHint, setShowHint] = useState(false);
 
+  
   const handleHint = () => {
     if (!hintUsed) {
       setHintUsed(true);
+      setShowHint(true);
     } else {
       alert("You already used your hint today!");
     }
@@ -19,15 +23,26 @@ export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved
 
   const handleSubmit = () => {
     // Pass to parent
-    const outcome = onGuess(game, tickerGuess.trim(), yearGuess.trim());
+    const outcome = onGuess(game, tickerGuess.trim(), yearGuess.trim(), pointsPerCorrect);
     setResult(outcome); 
+    if (outcome.correct){
+        celebrate(); 
+    }
   };
 
   return (
     <div className="bg-card rounded-lg p-4 mb-4 border border-gray-700">
       <h2 className="text-xl font-semibold mb-4">{date}</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold">
+          {game.mode === 'hard' ? 'Hard Mode' : 'Easy Mode'}
+        </h2>
+        <span className="text-sm text-gray-300">
+          {game.mode === 'hard' ? '3 pts for correct ticker' : '1 pt for correct ticker'}
+        </span>
+      </div>
 
-      <Chart prices={game.prices} />
+      <Chart prices={game.prices} showDates={showDates} />
 
     {!isSolved && (
         <>
@@ -39,15 +54,19 @@ export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved
             onChange={(e) => setTickerGuess(e.target.value)}
             />
 
-            <input
-            className="flex-1 max-w-xs block my-2 p-2 rounded bg-background border border-gray-600 text-text w-32"
-            placeholder="Year (optional)"
-            value={yearGuess}
-            onChange={(e) => setYearGuess(e.target.value)}
-            />
+            {(game.mode === 'hard') && (
+                <input
+                className="flex-1 max-w-xs block my-2 p-2 rounded bg-background border border-gray-600 text-text w-32"
+                placeholder="Year (optional)"
+                value={yearGuess}
+                onChange={(e) => setYearGuess(e.target.value)}
+                />
+            )}
+            
 
             <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:bg-gray-600" 
-                onClick={handleHint}>Request Hint</button>
+                onClick={handleHint}
+                disabled ={hintUsed}>Request Hint</button>
 
             
             
@@ -57,7 +76,7 @@ export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved
 
         </div>
             <div className="mt-4 flex gap-2">
-            {hintUsed && <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded w-fit">
+            {showHint && <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded w-fit">
                 <p>Industry Hint: {game.industry}</p>    
             </div>}
             </div>

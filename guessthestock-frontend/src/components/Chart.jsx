@@ -34,7 +34,7 @@ function getTickValues(dataMin, dataMax) {
   return ticks;
 }
 
-export default function Chart({ prices }) {
+export default function Chart({ prices, showDates }) {
 
     const closes = prices.map(p => p.close);
     const dataMin = Math.min(...closes);
@@ -49,7 +49,7 @@ export default function Chart({ prices }) {
       <LineChart data={prices}
       margin={{right:0, left:0}}
       >
-        <XAxis dataKey="date" hide
+        <XAxis dataKey="date" hide = {!showDates}
         padding={{ left: 0, right: 0 }} /> {/* hide to keep it mystery! */}
         <YAxis
         ticks ={tickValues}

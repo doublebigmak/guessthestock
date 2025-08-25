@@ -49,5 +49,5 @@ class Game(Base):
     end_date = Column(Date, nullable=False)
     game_day = Column(Date, nullable=False)  # The day the game is served
     game_index = Column(Integer, nullable=False)  # 0, 1, or 2 (for 3 games per day)
-
+    mode = Column(String, default="easy", nullable = False)  # "easy" or "hard"
     stock = relationship("Stock", back_populates="games")
