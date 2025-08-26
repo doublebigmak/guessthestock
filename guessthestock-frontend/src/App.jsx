@@ -96,19 +96,19 @@ function App() {
       {/* Mode toggle */}
       <div className="flex gap-2 mb-6">
         <button
-          className={`px-4 py-2 rounded ${mode === 'hard' ? 'bg-emerald-600 text-white' : 'bg-card border border-gray-700'}`}
+          className={`px-4 py-2 rounded ${mode === 'hard' ? 'bg-yellow-600 text-white' : 'bg-card border border-gray-700'}`}
           onClick={() => setMode('hard')}
         >
           Hard
         </button>
         <button
-          className={`px-4 py-2 rounded ${mode === 'easy' ? 'bg-emerald-600 text-white' : 'bg-card border border-gray-700'}`}
+          className={`px-4 py-2 rounded ${mode === 'easy' ? 'bg-yellow-600 text-white' : 'bg-card border border-gray-700'}`}
           onClick={() => setMode('easy')}
         >
           Easy
         </button>
         <button
-          className={`px-4 py-2 rounded ${mode === 'easy' ? 'bg-blue-600 text-white' : 'bg-card border border-gray-700'}`}
+          className={`px-4 py-2 rounded ${'bg-blue-600 text-white' }`}
           onClick={() => celebrate()}
         >
           Confetti
