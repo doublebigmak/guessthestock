@@ -32,7 +32,7 @@ export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved
 
   return (
     <div className="bg-card rounded-lg p-4 mb-4 border border-gray-700">
-      <h2 className="text-xl font-semibold mb-4">{date}</h2>
+      <h2 className="text-xl font-semibold mb-4">Today's game: {date}</h2>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">
           {game.mode === 'hard' ? 'Hard Mode' : 'Easy Mode'}
@@ -66,7 +66,7 @@ export default function GameCard({ game, onGuess, hintUsed, setHintUsed,isSolved
 
             <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:bg-gray-600" 
                 onClick={handleHint}
-                disabled ={hintUsed}>Request Hint</button>
+                >Request Hint</button>
 
             
             
